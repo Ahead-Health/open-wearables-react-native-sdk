@@ -1,4 +1,4 @@
-import { NativeModule } from "expo-modules-core";
+import { NativeModule } from "expo";
 import { HealthDataType, OpenWearablesModuleEvents, HealthDataProvider, OWLogLevel, StoredCredentials, SyncStatus } from "./OpenWearables.types";
 declare class OpenWearablesModule extends NativeModule<OpenWearablesModuleEvents> {
     configure(host: string, customSyncURL?: string): void;

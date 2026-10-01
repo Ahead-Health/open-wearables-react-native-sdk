@@ -380,4 +380,5 @@ Consumed from git by `packages/mobile-app` in Ahead-Health/ahead_health_app_mono
 - iOS pod bumped to `OpenWearablesHealthSDK` 0.15.0 (cold-relaunch token refresh, sign-out disconnect). Public API is unchanged from 0.14.0.
 - The config plugin merges `UIBackgroundModes` / `BGTaskSchedulerPermittedIdentifiers` instead of replacing them, and writes `NSHealthUpdateUsageDescription` only when given (the SDK is read-only).
 - Plugin option `android: false` skips the Health Connect manifest changes for iOS-only rollouts.
+- The app delegate subscriber re-runs `configure(host:)` natively at launch when a host is stored (restores HealthKit observers before JS runs) and only claims the SDK's own background URL session.
 - `build/` is committed and the `prepare` script is removed, so a git install needs no build step. Rebuild with `npx tsc -p tsconfig.json` after changing `src/`.
