@@ -6,8 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const withOpenWearablesIOS_1 = __importDefault(require("./withOpenWearablesIOS"));
 const withOpenWearablesAndroid_1 = __importDefault(require("./withOpenWearablesAndroid"));
 const withOpenWearables = (config, options = {}) => {
-    config = (0, withOpenWearablesIOS_1.default)(config, options);
-    config = (0, withOpenWearablesAndroid_1.default)(config);
+    const { android = true, ...iosOptions } = options;
+    config = (0, withOpenWearablesIOS_1.default)(config, iosOptions);
+    if (android) {
+        config = (0, withOpenWearablesAndroid_1.default)(config);
+    }
     return config;
 };
 exports.default = withOpenWearables;
