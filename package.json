@@ -1,6 +1,6 @@
 {
   "name": "open-wearables",
-  "version": "0.2.0",
+  "version": "0.2.0-ahead.1",
   "description": "OpenWearables React Native SDK",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -9,7 +9,6 @@
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
-    "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
@@ -26,7 +25,7 @@
     "wellness",
     "wearable"
   ],
-  "repository": "https://github.com/TheBlueBoxDev/openwereables-react-native-sdk",
+  "repository": "https://github.com/Ahead-Health/open-wearables-react-native-sdk",
   "bugs": {
     "url": "https://github.com/TheBlueBoxDev/openwereables-react-native-sdk/issues"
   },

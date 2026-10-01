@@ -6,7 +6,14 @@ import {
 
 export interface OpenWearablesIOSPluginProps {
   healthShareUsage?: string;
+  /** The SDK only reads HealthKit, so this is written only when given. */
   healthUpdateUsage?: string;
+}
+
+/** Appends to a plist string array without dropping what other plugins set. */
+function mergeStringArray(existing: unknown, additions: string[]): string[] {
+  const current = Array.isArray(existing) ? (existing as string[]) : [];
+  return [...current, ...additions.filter((v) => !current.includes(v))];
 }
 
 const withOpenWearablesIOS: ConfigPlugin<OpenWearablesIOSPluginProps> = (
@@ -15,7 +22,7 @@ const withOpenWearablesIOS: ConfigPlugin<OpenWearablesIOSPluginProps> = (
 ) => {
   const {
     healthShareUsage = "Allow access to your health data.",
-    healthUpdateUsage = "Allow updates to your health data.",
+    healthUpdateUsage,
   } = options;
 
   // Add HealthKit entitlements
@@ -29,14 +36,24 @@ const withOpenWearablesIOS: ConfigPlugin<OpenWearablesIOSPluginProps> = (
   // Add Info.plist usage descriptions & BGTask identifiers
   config = withInfoPlist(config, (config) => {
     config.modResults["NSHealthShareUsageDescription"] = healthShareUsage;
-    config.modResults["NSHealthUpdateUsageDescription"] = healthUpdateUsage;
+    if (healthUpdateUsage) {
+      config.modResults["NSHealthUpdateUsageDescription"] = healthUpdateUsage;
+    }
 
-    config.modResults["UIBackgroundModes"] = ["fetch", "processing"];
+    // Merge, not replace: overwriting dropped modes like remote-notification
+    // that other plugins (e.g. expo-notifications) had already set.
+    config.modResults["UIBackgroundModes"] = mergeStringArray(
+      config.modResults["UIBackgroundModes"],
+      ["fetch", "processing"]
+    );
 
-    config.modResults["BGTaskSchedulerPermittedIdentifiers"] = [
-      "com.openwearables.healthsdk.task.refresh",
-      "com.openwearables.healthsdk.task.process",
-    ];
+    config.modResults["BGTaskSchedulerPermittedIdentifiers"] = mergeStringArray(
+      config.modResults["BGTaskSchedulerPermittedIdentifiers"],
+      [
+        "com.openwearables.healthsdk.task.refresh",
+        "com.openwearables.healthsdk.task.process",
+      ]
+    );
 
     return config;
   });
